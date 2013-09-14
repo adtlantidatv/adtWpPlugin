@@ -139,6 +139,7 @@ function wpuf_add_user() {
         <form action="" method="post">
 
             <ul class="wpuf-post-form">
+            	
                 <li>
                     <label for="user_login">
                         <?php _e( 'Username', 'adtp' ); ?> <span class="required">*</span>
