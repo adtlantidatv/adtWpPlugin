@@ -778,6 +778,10 @@ jQuery(document).ready(function($) {
             if(typeof plupload === 'undefined') {
                 return;
             }
+            
+            if(typeof wpuf === 'undefined'){
+	            return;
+            }
 
             if(wpuf.featEnabled !== '1') {
                 return;

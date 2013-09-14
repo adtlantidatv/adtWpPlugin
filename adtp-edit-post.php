@@ -128,7 +128,9 @@ class ADTP_Edit_Post {
         
             <form class="form_01" name="wpuf_edit_post_form" id="wpuf_edit_post_form" action="" enctype="multipart/form-data" method="POST">
                 <?php wp_nonce_field( 'adtp-edit-post' ) ?>
+                
                 <ul class="wpuf-post-form">
+	                <?php do_action( 'adtp_add_clear_errors', $curpost->post_type, $curpost ); //plugin hook      ?>
                     <li class="row">
                     	
                     	<div class="span3">

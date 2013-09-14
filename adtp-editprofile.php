@@ -89,6 +89,7 @@ class ADTP_Edit_Profile {
                 <?php do_action( 'profile_personal_options', $profileuser ); ?>
 
                 <ul class="reset">
+	            	<?php do_action( 'adtp_add_clear_errors', $curpost->post_type, $curpost ); //plugin hook      ?>
                 	<li class="row">
                 		<div class="span3 offset1">
                 			<label for="user_login1"><?php _e( 'Username' ); ?></label>

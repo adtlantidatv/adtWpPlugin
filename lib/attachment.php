@@ -10,6 +10,7 @@ class WPUF_Attachment {
 
     function __construct() {
 
+        add_action( 'adtp_add_clear_errors', array($this, 'adtp_clear_errors'), 10, 2 );
         add_action( 'wpuf_add_post_form_top', array($this, 'add_post_fields'), 10, 2 );
         add_action( 'wp_enqueue_scripts', array($this, 'scripts') );
 
@@ -89,6 +90,15 @@ class WPUF_Attachment {
         </li>
         <?php
     }
+
+    function adtp_clear_errors( $post_type, $post_obj = null ) {
+    ?>
+    	<li>
+    		<div id="wpuf-attachment-upload-container"></div>
+        </li>
+
+    <?php
+	}
 
     function upload_file() {
         check_ajax_referer( 'wpuf_audio_track', 'nonce' );
