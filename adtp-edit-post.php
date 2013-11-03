@@ -73,6 +73,7 @@ class ADTP_Edit_Post {
     }
 
     function edit_form( $curpost ) {
+    	global $files;
         $post_tags = wp_get_post_tags( $curpost->ID );
         $tagsarray = array();
         foreach ($post_tags as $tag) {
@@ -81,29 +82,34 @@ class ADTP_Edit_Post {
         $tagslist = implode( ', ', $tagsarray );
         $categories = get_the_category( $curpost->ID );
         $featured_image = wpuf_get_option( 'enable_featured_image', 'adtp_frontend_posting', 'no' );
+
+		$files = getFilesUrlByType($curpost->ID);
         ?>
         <div id="wpuf-post-area" class="span12 editar_video">
-
+        	
+        	<?php if($files['webm']!=null){ ?>
 			<?php
-				$webms = get_children(array('numberposts' => 1, 'post_mime_type' => 'video/webm', 'post_parent' => $curpost->ID, 'post_type' => 'attachment'));
-				$mp4s = get_children(array('numberposts' => 1, 'post_mime_type' => 'video/mp4', 'post_parent' => $curpost->ID, 'post_type' => 'attachment'));
-				$oggs = get_children(array('numberposts' => 1, 'post_mime_type' => 'video/ogg', 'post_parent' => $curpost->ID, 'post_type' => 'attachment'));
-
-				$thumb = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'video_poster' );
+				$thumb = wp_get_attachment_image_src( get_post_thumbnail_id($curpost->ID), 'video_poster' );
 				$url = $thumb['0']; 
 			?>
 			<video class="video-js vjs-default-skin" poster="<?php echo $url; ?>" height="659" width="100%" controls="" data-setup='{"controls":true}' id="video_<?php the_ID(); ?>">
-				<?php if($webms){ ?>
-			    <source src="<?php echo wp_get_attachment_url( reset($webms)->ID ); ?>" type="video/webm">
+				<?php if($files['webm']){ ?>
+			    <source src="<?php echo $files['webm'] ?>" type="video/webm">
 				<?php } ?>
-				<?php if($mp4s){ ?>
-			    <source src="<?php echo wp_get_attachment_url( reset($mp4s)->ID ); ?>" type="video/mp4">
-				<?php } ?>
-				<?php if($oggs){ ?>
-			    <source src="<?php echo wp_get_attachment_url( reset($oggs)->ID ); ?>" type="video/ogg">
+				<?php if($files['mp4']){ ?>
+			    <source src="<?php echo $files['mp4']; ?>" type="video/mp4">
+				<?php } ?>-
+				<?php if($files['ogv']){ ?>
+			    <source src="<?php echo $files['ogv']; ?>" type="video/ogg">
 				<?php } ?>
 			    <p class="warning">Your browser does not support HTML5 video.</p>
 			</video>
+			<?php } ?>
+
+				<!-- audio player -->
+				<?php if($files['mp3']!=null || $files['ogg']!=null){ ?>
+					<?php get_template_part( 'player', 'audio' ); ?> 
+				<?php } ?>
 				
 			<div class="row margin_top_30">
 				<div class="span1">
