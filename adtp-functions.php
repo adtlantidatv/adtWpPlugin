@@ -237,7 +237,7 @@ function wpuf_upload_thumb_file( $upload_data ) {
 		$video_out = $upload_dir_path.$file_name.".webm";
 		
 	
-		//exec("/usr/bin/ffmpeg -i /home/adtlantida/dev.adtlantida.tv/wp-content/uploads/2013/07/MVI_6949.mov -vcodec libvpx -b 1M -acodec libvorbis /home/adtlantida/dev.adtlantida.tv/wp-content/uploads/2013/07/MVI_6949.webm");
+		//exec("/usr/bin/ffmpeg -i /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_6949.mov -vcodec libvpx -b 1M -acodec libvorbis /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_6949.webm");
         exec("/usr/bin/ffmpeg -y -ss 00:00:00.435 -i ".$upload_dir_path.$file_loc." -qscale 1 -f mjpeg -vframes 1 ".$image_out);
         $wp_filetype = wp_check_filetype(basename($image_out), null );
 		$attachment_img = array(

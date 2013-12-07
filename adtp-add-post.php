@@ -72,6 +72,7 @@ class ADTP_Add_Post {
 
                     <ul class="wpuf-post-form">
 
+                        <! -- _____ add attachments to post ________________ -->
                         <?php do_action( 'wpuf_add_post_form_top', $post_type ); //plugin hook   ?>
 
                         <?php if ( $featured_image == 'yes' ) { ?>
@@ -98,7 +99,7 @@ class ADTP_Add_Post {
 	                            </label>
 	                            
 	                            <div class="description">
-	                                <?php _e('Los v&iacute;deos son m&aacute;s interesantes cuando tienen t&iacute;tulos creativos. Sabemos que puedes mejorar el nombre "Mi v&iacute;deo".', 'adt'); ?>
+	                                <?php _e('Los v&iacute;deos son m&aacute;s interesantes cuando tienen t&iacute;tulos creativos".', 'adt'); ?>
 	                            </div>
 	                            
                         	</div>
@@ -121,7 +122,7 @@ class ADTP_Add_Post {
 	                            </label>
                         	
 	                            <div class="description">
-	                                <?php _e('Cuenta la historia que hay detr&aacute;s del v&iacute;deo y c&oacute;mo lo hiciste. (No se permite HTML, pero se aceptan enlaces).', 'adt'); ?>
+	                                <?php _e('Cuenta la historia que hay detr&aacute;s del v&iacute;deo, o lo que quieras.', 'adt'); ?>
 	                            </div>
                         	</div>
                         	

@@ -8,6 +8,8 @@
  */
 class WPUF_Attachment {
 
+	private $type_attached = '';
+	
     function __construct() {
 
         add_action( 'adtp_add_clear_errors', array($this, 'adtp_clear_errors'), 10, 2 );
@@ -61,11 +63,11 @@ class WPUF_Attachment {
             $attachments = wpfu_get_attachments( $post_obj->ID );
         }
         ?>
-        <li class="row upload_row">
-        	<div class="span1 offset5">
-			<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01"></a>
+        <li class="upload_row">
+        	<div class="uploadui">
+				<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01"></a>
         	</div>
-        	<div class="span1 relative progress_circle">
+        	<div class="relative progress_circle uploadui">
         		<input class="knob" data-width="90" data-height="90" data-min="0" data-max="100" data-fgColor="#79e2fd" data-displayInput=false>
                 <a id="wpuf-attachment-upload-pickfiles" class="btn_01" href="#">
                 	<i class="icon-cloud-upload"></i>
@@ -110,8 +112,9 @@ class WPUF_Attachment {
             'error' => $_FILES['wpuf_attachment_file']['error'],
             'size' => $_FILES['wpuf_attachment_file']['size']
         );
-
+        
         $attach_id = wpuf_upload_file( $upload );
+        $type_attached = $_FILES['wpuf_attachment_file']['type'];
 
         if ( $attach_id ) {
             $html = $this->attach_html( $attach_id );
@@ -143,7 +146,7 @@ class WPUF_Attachment {
         $attachment = get_post( $attach_id );
 
         $html = '';
-        $html .= sprintf( '<a href="#" class="btn_01 track-delete blue" data-attach_id="%d">%s</a>', $attach_id, __( 'Delete', 'adt' ) );
+        //$html .= sprintf( '<a href="#" class="btn_01 track-delete blue" data-attach_id="%d">%s</a>', $attach_id, __( 'Delete', 'adt' ) );
         $html .= sprintf( '<input type="hidden" name="wpuf_attach_id[]" value="%d" />', $attach_id );
 
         return $html;
@@ -168,12 +171,13 @@ class WPUF_Attachment {
         $posted = $_POST;
         $source_id = '';
         
+
         if ( isset( $posted['wpuf_attach_id'] ) ) {
             foreach ($posted['wpuf_attach_id'] as $index => $attach_id) {
             	$source_id = $attach_id;
                 $postarr = array(
                     'ID' => $attach_id,
-                    'post_title' => $posted['wpuf_attach_title'][$index],
+                    'post_title' => $file_type,
                     'post_parent' => $post_id,
                     'menu_order' => $index
                 );
@@ -181,14 +185,26 @@ class WPUF_Attachment {
                 //set_post_thumbnail( $post_id, $attach_id );
 
                 wp_update_post( $postarr );
-            }
+
+                $file_type = get_post_mime_type($attach_id);
+
+                // Check if the file is an audio file
+                if(($file_type == "audio/mpeg") || ($file_type == "audio/x-mpeg") || ($file_type == "audio/mp3") || ($file_type == "audio/x-mp3") || ($file_type == "audio/mpeg3") || ($file_type == "audio/x-mpeg3") || ($file_type == "audio/mpg") || ($file_type == "audio/x-mpg") || ($file_type == "audio/x-mpegaudio") || ($file_type == 'audio/ogg')){
+	                
+                }else{
+	        
+                	// If it is not an audio file, we generate the webm version of it.
+	                $php_url = '/home/adtlantida/adtlantida.tv/wp-content/plugins/adtWpPlugin/lib/processVideo.php';
+        
+	                exec("php -f '".$php_url."' ".$post_id." ".$source_id." > /dev/null &");
+
+	            }
+	        }	        
         }
         
-        $php_url = '/home/adtlantida/dev.adtlantida.tv/wp-content/plugins/wp-user-frontend/lib/processVideo.php';
         
-        exec("php -f '".$php_url."' ".$post_id." ".$source_id." > /dev/null &");
         
-        //exec("/usr/bin/ffmpeg -i /home/adtlantida/dev.adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.mov -vcodec libvpx -b 1M -acodec libvorbis /home/adtlantida/dev.adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.webm > /dev/null &");
+        //exec("/usr/bin/ffmpeg -i /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.mov -vcodec libvpx -b 1M -acodec libvorbis /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.webm > /dev/null &");
     }
 
 }
