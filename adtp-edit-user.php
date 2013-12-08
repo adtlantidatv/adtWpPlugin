@@ -74,7 +74,7 @@ function wpuf_show_users() {
         if ( current_user_can( 'delete_users' ) && $delete_flag == true ) {
             //var_dump($userdata);
             wp_delete_user( $to_be_deleted );
-            echo '<div class="success">' . __( 'User Deleted', 'adtp' ) . '</div>';
+            echo '<div class="alert alert-success">' . __( 'User Deleted', 'adtp' ) . '</div>';
         } else {
             echo '<div class="error">Cheatin&#8217; uh?</div>';
         }
@@ -129,7 +129,7 @@ function wpuf_add_user() {
             $error = null;
             $error = wpuf_register_new_user( $username, $email, $role );
             if ( !is_wp_error( $error ) ) {
-                echo '<div class="success">' . __( 'User Added', 'adtp' ) . '</div>';
+                echo '<div class="alert alert-success">' . __( 'User Added', 'adtp' ) . '</div>';
             } else {
                 echo '<div class="error">' . $error->get_error_message() . '</div>';
             }

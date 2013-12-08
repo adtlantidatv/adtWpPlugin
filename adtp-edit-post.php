@@ -127,7 +127,7 @@ class ADTP_Edit_Post {
 				
 				<div class="span11">
 					<h1>
-						<span><?php _e('Editar:', 'adt'); ?></span> <?php echo $curpost->post_title; ?>
+						<span><?php _e('Edit:', 'adt'); ?></span> <?php echo $curpost->post_title; ?>
 					</h1>
 				</div>
 			</div>
@@ -145,7 +145,7 @@ class ADTP_Edit_Post {
 	                        </label>
 
                             <div class="description">
-                                <?php _e('Los v&iacute;deos son m&aacute;s interesantes cuando tienen t&iacute;tulos creativos. Sabemos que puedes mejorar el nombre "Mi v&iacute;deo".', 'adt'); ?>
+                                <?php _e('You know, be creative. Maybe you are also interested on being <a href="http://moz.com/learn/seo/title-tag">SEO friendly</a>. Avoid using titles like "my video"', 'adt'); ?>
                             </div>
                     	</div>
 
@@ -160,7 +160,7 @@ class ADTP_Edit_Post {
                     <li class="row">
                     	<div class="span3">
 	                        <label for="new-post-desc">
-	                            <?php _e('descripcion', 'adt'); ?> <span class="required">*</span>
+	                            <?php _e('description', 'adt'); ?> <span class="required">*</span>
 	                        </label>
                     	</div>
                     	

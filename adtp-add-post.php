@@ -95,11 +95,11 @@ class ADTP_Add_Post {
                         	<div class="span3 offset1">
 	                            
 	                            <label for="new-post-title">
-	                                <?php _e('Titulo', 'adt'); ?>
+	                                <?php _e('Title', 'adt'); ?>
 	                            </label>
 	                            
 	                            <div class="description">
-	                                <?php _e('Los v&iacute;deos son m&aacute;s interesantes cuando tienen t&iacute;tulos creativos".', 'adt'); ?>
+	                                <?php _e('You know, be creative. Maybe you are also interested on being <a href="http://moz.com/learn/seo/title-tag">SEO friendly</a>. Avoid using titles like "my video"', 'adt'); ?>
 	                            </div>
 	                            
                         	</div>
@@ -118,11 +118,11 @@ class ADTP_Add_Post {
                         	<div class="span3 offset1">
                         	
 	                            <label for="new-post-desc">
-	                                <?php _e('Descripcion', 'adt'); ?>
+	                                <?php _e('Description', 'adt'); ?>
 	                            </label>
                         	
 	                            <div class="description">
-	                                <?php _e('Cuenta la historia que hay detr&aacute;s del v&iacute;deo, o lo que quieras.', 'adt'); ?>
+	                                <?php _e('Tell the story that is behind the video, or just tell whatever you want', 'adt'); ?>
 	                            </div>
                         	</div>
                         	
@@ -161,7 +161,7 @@ class ADTP_Add_Post {
 	                                </label>
 
 		                            <div class="description">
-		                                <?php _e('A&ntilde;ade algunas palabras clave relevantes para que sea m&aacute;s f&aacute;cil encontrar tu v&iacute;deo (separa las etiquetas con comas).', 'adt'); ?>
+		                                <?php _e('Add tags that would make easier to find your video. Do not add more than 5', 'adt'); ?>
 		                            </div>
                                 </div>
                                 
@@ -176,7 +176,7 @@ class ADTP_Add_Post {
 
                         <li class="row">
                         	<div class="span2 offset1">
-	                            <input class="wpuf_submit" type="submit" name="wpuf_new_post_submit" value="<?php _e('enviar', 'adt'); ?>">
+	                            <input class="wpuf_submit" type="submit" name="wpuf_new_post_submit" value="<?php _e('send', 'adt'); ?>">
 	                            <input type="hidden" name="wpuf_post_type" value="<?php echo $post_type; ?>" />
 	                            <input type="hidden" name="wpuf_post_new_submit" value="yes" />
                         	</div>

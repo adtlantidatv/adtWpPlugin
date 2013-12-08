@@ -64,7 +64,7 @@ class ADTP_Edit_Profile {
                 $style = 'error';
             } else {
                 $message = __( '<strong>Success</strong>: Profile updated', 'adtp' );
-                $style = 'success';
+                $style = 'alert alert-success alert-full';
                 do_action( 'personal_options_update', $user_id );
             }
         }
@@ -72,7 +72,7 @@ class ADTP_Edit_Profile {
         $profileuser = get_user_to_edit( $user_id );
 
         if ( isset( $message ) ) {
-            echo '<div class="' . $style . '">' . $message . '</div>';
+            echo '<div class="' . $style . '"><button type="button" class="close" data-dismiss="alert">&times;</button>' . $message . '</div>';
         }
         ?>
         <div class="wpuf-profile span12">
@@ -95,7 +95,7 @@ class ADTP_Edit_Profile {
                 			<label for="user_login1"><?php _e( 'Username' ); ?></label>
                            
                             <div class="description">
-                                <?php _e('O nome de usuarix on se pode mudar', 'adt'); ?>
+                                <?php _e('Username can not be changed', 'adt'); ?>
                             </div>
                 		</div>
                 		<div class="span8">
@@ -215,7 +215,7 @@ class ADTP_Edit_Profile {
             $select = ( $profileuser->wpuf_postlock == 'yes' ) ? 'yes' : 'no';
             ?>
 
-            <h3><?php _e( 'WPUF Post Lock', 'adtp' ); ?></h3>
+            <h3><?php _e( 'ADTP Post Lock', 'adtp' ); ?></h3>
             <table class="form-table">
                 <tr>
                     <th><label for="post-lock"><?php _e( 'Lock Post:', 'adtp' ); ?> </label></th>
