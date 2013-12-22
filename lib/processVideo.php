@@ -34,8 +34,9 @@ set_post_thumbnail( $post_id, $attach_img_id );
 
 // video
 $video_out = $upload_dir_path.$source_name.'.webm';
+$php_url = '/home/adtlantida/adtlantida.tv/wp-content/plugins/adtWpPlugin/lib/toggleConverting.php';
 
-exec("/usr/bin/ffmpeg -i ".$source_in." -vcodec libvpx -b 1M -acodec libvorbis ".$video_out);
+exec("/usr/bin/ffmpeg -i ".$source_in." -vcodec libvpx -b 1M -acodec libvorbis ".$video_out."; php -f '".$php_url."' ".$post_id);
 
 $wp_filetype = wp_check_filetype(basename($video_out), null );
 $attachment_video= array(

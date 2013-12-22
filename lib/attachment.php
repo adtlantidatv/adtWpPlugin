@@ -192,19 +192,15 @@ class WPUF_Attachment {
                 if(($file_type == "audio/mpeg") || ($file_type == "audio/x-mpeg") || ($file_type == "audio/mp3") || ($file_type == "audio/x-mp3") || ($file_type == "audio/mpeg3") || ($file_type == "audio/x-mpeg3") || ($file_type == "audio/mpg") || ($file_type == "audio/x-mpg") || ($file_type == "audio/x-mpegaudio") || ($file_type == 'audio/ogg')){
 	                
                 }else{
+					update_post_meta($post_id, 'adt_is_converting', '1');
 	        
                 	// If it is not an audio file, we generate the webm version of it.
 	                $php_url = '/home/adtlantida/adtlantida.tv/wp-content/plugins/adtWpPlugin/lib/processVideo.php';
-        
 	                exec("php -f '".$php_url."' ".$post_id." ".$source_id." > /dev/null &");
 
 	            }
 	        }	        
-        }
-        
-        
-        
-        //exec("/usr/bin/ffmpeg -i /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.mov -vcodec libvpx -b 1M -acodec libvorbis /home/adtlantida/adtlantida.tv/wp-content/uploads/2013/07/MVI_1720.webm > /dev/null &");
+        }        
     }
 
 }
