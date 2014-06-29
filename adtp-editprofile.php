@@ -98,7 +98,7 @@ class ADTP_Edit_Profile {
                                 <?php _e('Username can not be changed', 'adt'); ?>
                             </div>
                 		</div>
-                		<div class="span8">
+                		<div class="span7 field">
                 			<input type="text" name="user_login" id="user_login1" value="<?php echo esc_attr( $profileuser->user_login ); ?>" disabled="disabled" class="regular-text" />
                 		</div>
                 	</li>
@@ -106,9 +106,10 @@ class ADTP_Edit_Profile {
                 	<li class="row">
                 		<div class="span3 offset1">
 	                		<label for="first_name"><?php _e( 'First Name' ) ?></label>
+
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="text" name="first_name" id="first_name" value="<?php echo esc_attr( $profileuser->first_name ) ?>" class="regular-text" />
                 		</div>
                 	</li>
@@ -118,7 +119,7 @@ class ADTP_Edit_Profile {
 	                		<label for="last_name"><?php _e( 'Last Name' ) ?></label>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="text" name="last_name" id="last_name" value="<?php echo esc_attr( $profileuser->last_name ) ?>" class="regular-text" />
                 		</div>
                 	</li>
@@ -128,7 +129,7 @@ class ADTP_Edit_Profile {
 	                		<label for="nickname"><?php _e( 'Nickname' ); ?></label>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="text" name="nickname" id="nickname" value="<?php echo esc_attr( $profileuser->nickname ) ?>" class="regular-text" />
                 		</div>
                 	</li>
@@ -138,7 +139,7 @@ class ADTP_Edit_Profile {
 	                		<label for="email"><?php _e( 'E-mail' ); ?></label>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="text" name="email" id="email" value="<?php echo esc_attr( $profileuser->user_email ) ?>" class="regular-text" />
                 		</div>
                 	</li>
@@ -148,7 +149,7 @@ class ADTP_Edit_Profile {
 	                		<label for="url"><?php _e( 'Website' ) ?></label>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="text" name="url" id="url" value="<?php echo esc_attr( $profileuser->user_url ) ?>" class="regular-text code" />
                 		</div>
                 	</li>
@@ -161,7 +162,7 @@ class ADTP_Edit_Profile {
                             </div>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7 field">
                 			<textarea name="description" id="description" rows="5" cols="30"><?php echo esc_html( $profileuser->description ); ?></textarea>
                 		</div>
                 	</li>
@@ -171,7 +172,7 @@ class ADTP_Edit_Profile {
 	                		<label for="pass1"><?php _e( 'New Password', 'adtp' ); ?></label>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="password" name="pass1" id="pass1" size="16" value="" autocomplete="off" />
                 		</div>
                 	</li>
@@ -179,12 +180,9 @@ class ADTP_Edit_Profile {
                 	<li class="row">
                 		<div class="span3 offset1">
 	                		<label><?php _e( 'Confirm Password', 'adtp' ); ?></label>
-                            <div class="description">
-                                <?php _e( "Type your new password again." ); ?>
-                            </div>
                 		</div>
 
-                		<div class="span8">
+                		<div class="span7">
                 			<input type="password" name="pass2" id="pass2" size="16" value="" autocomplete="off" />
                 		</div>
                 	</li>
@@ -194,7 +192,7 @@ class ADTP_Edit_Profile {
                 <?php do_action( 'show_user_profile', $profileuser ); ?>
 
                 <div class="submit row">
-                    <div class="span2 offset1">
+                    <div class="span2 offset4">
 	                    <input type="hidden" name="action" value="update" />
 	                    <input type="hidden" name="user_id" id="user_id" value="<?php echo esc_attr( $user_id ); ?>" />
 	                    <input type="submit" class="wpuf-submit" value="<?php _e( 'Update Profile', 'adtp' ); ?>" name="submit" />

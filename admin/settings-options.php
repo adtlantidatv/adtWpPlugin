@@ -15,6 +15,10 @@ function adtp_settings_sections() {
             'id' => 'adtp_others',
             'title' => __( 'Others', 'adtp' )
         ),
+        array(
+            'id' => 'adtp_server',
+            'title' => __( 'Server', 'adtp' )
+        ),
     );
 
     return apply_filters( 'adtp_settings_sections', $sections );
@@ -83,6 +87,13 @@ function adtp_settings_fields() {
                 'options' => $pages
             ),
             array(
+                'name' => 'edit_stream_id',
+                'label' => __( 'Edit Stream Page', 'adtp' ),
+                'desc' => __( 'Select the page where [wpuf_edit_stream] is located', 'adtp' ),
+                'type' => 'select',
+                'options' => $pages
+            ),
+            array(
                 'name' => 'admin_access',
                 'label' => __( 'Admin area access', 'adtp' ),
                 'desc' => __( 'Allow you to block specific user role to WordPress admin area.', 'adtp' ),
@@ -95,6 +106,32 @@ function adtp_settings_fields() {
                     'edit_posts' => __( 'Admins, Editors, Authors, Contributors', 'adtp' ),
                     'read' => __( 'Default', 'adtp' )
                 )
+            ),
+        ) ),
+        'adtp_server' => apply_filters( 'adtp_options_server', array(
+            array(
+                'name' => 'avconv_path',
+                'label' => __( 'avconv server path', 'adtp' ),
+                'desc' => __( 'Enter the server path for avconv(http://libav.org/avconv.html). For example /usr/bin/avconv', 'adtp' ),
+                'type' => 'text'
+            ),
+            array(
+                'name' => 'ffmpeg_path',
+                'label' => __( 'ffmpeg server path', 'adtp' ),
+                'desc' => __( 'Enter the server path for ffmpeg(http://www.ffmpeg.org/). For example /usr/bin/ffmpeg', 'adtp' ),
+                'type' => 'text'
+            ),
+            array(
+                'name' => 'sox_path',
+                'label' => __( 'sox server path', 'adtp' ),
+                'desc' => __( 'Enter the server path for sox(http://sox.sourceforge.net/), which is needed for converting mp3 files to png waveforms. For example /usr/bin/sox', 'adtp' ),
+                'type' => 'text'
+            ),
+            array(
+                'name' => 'wav2png_path',
+                'label' => __( 'wav2png server path', 'adtp' ),
+                'desc' => __( 'Enter the server path for wav2png(https://github.com/beschulz/wav2png), which is needed for converting audio files to png waveforms. For example /usr/bin/wav2png', 'adtp' ),
+                'type' => 'text'
             ),
         ) ),
     );

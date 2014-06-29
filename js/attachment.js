@@ -68,6 +68,7 @@ jQuery(document).ready(function($) {
             });
 
             attachUploader.bind('FileUploaded', function(up, file, response) {
+            	console.log(response);
             	console.log('FileUploaded');
             	$('#wpuf-attachment-upload-pickfiles span').fadeOut(function(){
             		$(this).parent().html('<span>done!</span>');

@@ -139,3 +139,5 @@
 #icon-adtp {
     background: transparent url( '../images/adtp-icon.png' ) no-repeat;
 }
+
+.adtp_metabox_warper .postbox{padding:30px}

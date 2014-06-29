@@ -295,7 +295,7 @@ class WeDevs_Settings_API {
      */
     function show_forms() {
         ?>
-        <div class="metabox-holder">
+        <div class="metabox-holder adtp_metabox_warper">
             <div class="postbox">
                 <?php foreach ($this->settings_sections as $form) { ?>
                     <div id="<?php echo $form['id']; ?>" class="group">

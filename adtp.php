@@ -57,10 +57,12 @@ require_once 'admin/settings-options.php';
 if ( is_admin() ) {
     require_once 'admin/settings.php';
 }
-
 require_once 'adtp-dashboard.php';
 require_once 'adtp-add-post.php';
+require_once 'adtp-add-stream.php';
+require_once 'adtp-add-multistream.php';
 require_once 'adtp-edit-post.php';
+require_once 'adtp-edit-stream.php';
 require_once 'adtp-editprofile.php';
 require_once 'adtp-edit-user.php';
 require_once 'adtp-ajax.php';
@@ -111,7 +113,7 @@ class ADTP_Main {
 
         require_once ABSPATH . '/wp-admin/includes/template.php';
 
-        wp_enqueue_style( 'adtp', $path . '/css/wpuf.css' );
+        wp_enqueue_style( 'adtp', $path . '/css/adtp.css' );
 
         if ( wpuf_has_shortcode( 'wpuf_addpost' ) || wpuf_has_shortcode( 'wpuf_edit' ) ) {
             wp_enqueue_script( 'plupload-handlers' );

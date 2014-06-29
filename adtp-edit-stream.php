@@ -1,9 +1,9 @@
 <?php
 
-class ADTP_Edit_Post {
+class ADTP_Edit_Stream {
 
     function __construct() {
-        add_shortcode( 'wpuf_edit', array($this, 'shortcode') );
+        add_shortcode( 'wpuf_edit_stream', array($this, 'shortcode') );
     }
 
     /**
@@ -75,6 +75,7 @@ class ADTP_Edit_Post {
     function edit_form( $curpost ) {
     	global $files;
         $post_tags = wp_get_post_tags( $curpost->ID );
+        $hashtag = get_post_meta( $curpost->ID, 'adt_twitter_hashtag', true );
         $tagsarray = array();
         foreach ($post_tags as $tag) {
             $tagsarray[] = $tag->name;
@@ -86,46 +87,39 @@ class ADTP_Edit_Post {
 		$files = getFilesUrlByType($curpost->ID);
         ?>
         <div id="wpuf-post-area" class="span12 editar_video">
-				<div class="clearfix">
-	        	
-		        	<?php if($files['webm']!=null){ ?>
-					<?php
-						$thumb = wp_get_attachment_image_src( get_post_thumbnail_id($curpost->ID), 'video_poster' );
-						$url = $thumb['0']; 
-					?>
-					<video class="video-js vjs-default-skin" poster="<?php echo $url; ?>" height="659" width="100%" controls="" data-setup='{"controls":true}' id="video_<?php the_ID(); ?>">
-						<?php if($files['webm']){ ?>
-					    <source src="<?php echo $files['webm'] ?>" type="video/webm">
-						<?php } ?>
-						<?php if($files['mp4']){ ?>
-					    <source src="<?php echo $files['mp4']; ?>" type="video/mp4">
-						<?php } ?>-
-						<?php if($files['ogv']){ ?>
-					    <source src="<?php echo $files['ogv']; ?>" type="video/ogg">
-						<?php } ?>
-					    <p class="warning">Your browser does not support HTML5 video.</p>
-					</video>
-					<?php } ?>
-		
-					<!-- audio player -->
-					<?php if($files['mp3']!=null || $files['ogg']!=null){ ?>
-						<?php include(locate_template('player-edit-audio.php')); ?>
-					<?php } ?>
-					
-				</div>
+        	
+        	<?php if($files['webm']!=null){ ?>
+			<?php
+				$thumb = wp_get_attachment_image_src( get_post_thumbnail_id($curpost->ID), 'video_poster' );
+				$url = $thumb['0']; 
+			?>
+			<video class="video-js vjs-default-skin" poster="<?php echo $url; ?>" height="659" width="100%" controls="" data-setup='{"controls":true}' id="video_<?php the_ID(); ?>">
+				<?php if($files['webm']){ ?>
+			    <source src="<?php echo $files['webm'] ?>" type="video/webm">
+				<?php } ?>
+				<?php if($files['mp4']){ ?>
+			    <source src="<?php echo $files['mp4']; ?>" type="video/mp4">
+				<?php } ?>-
+				<?php if($files['ogv']){ ?>
+			    <source src="<?php echo $files['ogv']; ?>" type="video/ogg">
+				<?php } ?>
+			    <p class="warning">Your browser does not support HTML5 video.</p>
+			</video>
+			<?php } ?>
+
+				<!-- audio player -->
+				<?php if($files['mp3']!=null || $files['ogg']!=null){ ?>
+					<?php get_template_part( 'player', 'audio' ); ?> 
+				<?php } ?>
 				
 			<div class="row margin_top_60">
 				<div class="span4">
-					<ul class="main_menu reset">
-						<li>
-							<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01 right"></a>
-						</li>
-					</ul>
+					<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01 right"></a>
 				</div>
 				
 				<div class="span6">
 					<h1>
-						<a href="<?php echo get_permalink($curpost->ID); ?>"><?php echo $curpost->post_title; ?></a>
+						<?php echo $curpost->post_title; ?>
 					</h1>
 				</div>
 
@@ -143,7 +137,7 @@ class ADTP_Edit_Post {
                     	
                     	<div class="span3 offset1">
 	                        <label for="new-post-title">
-	                            <?php _e('title', 'adt'); ?> <span class="required">*</span>
+	                            <?php _e('Title', 'adt'); ?> <span class="required">*</span>
 	                        </label>
 
                             <div class="description">
@@ -162,11 +156,15 @@ class ADTP_Edit_Post {
                     <li class="row">
                     	<div class="span3 offset1">
 	                        <label for="new-post-desc">
-	                            <?php _e('description', 'adt'); ?> <span class="required">*</span>
+	                            <?php _e('Description', 'adt'); ?> <span class="required">*</span>
 	                        </label>
+
+                            <div class="description">
+                                <?php _e('Tell the story that is behind the video or audio, or just tell whatever you want', 'adt'); ?>
+                            </div>
                     	</div>
                     	
-                    	<div class="span7">
+                    	<div class="span7 field">
 	                        <?php
 	                        $editor = wpuf_get_option( 'editor_type', 'adtp_frontend_posting', 'normal' );
 	                        if ( $editor == 'full' ) {
@@ -191,24 +189,45 @@ class ADTP_Edit_Post {
                     	<li class="row">
 	                    	<div class="span3 offset1">
 	                            <label for="new-post-tags">
-	                                <?php _e('tags', 'adt'); ?>
+	                                <?php _e('Tags', 'adt'); ?>
 	                            </label>
+
+	                            <div class="description">
+	                                <?php _e('Add tags that would make easier to find your video. Do not add more than 5', 'adt'); ?>
+	                            </div>
                             </div>
                             
-	                    	<div class="span7">
+	                    	<div class="span7 field">
                             	<input type="text" name="wpuf_post_tags" id="new-post-tags" value="<?php echo $tagslist; ?>">
 	                    	</div>
                         </li>
 
                     <?php do_action( 'wpuf_add_post_form_tags', $curpost->post_type, $curpost ); ?>
 
-                    <li class="row">
-                    	<div class="offset4 span8">
-	                        <input class="wpuf_submit" type="submit" name="wpuf_edit_post_submit" value="<?php _e('update', 'adt'); ?>">
-	                        <input type="hidden" name="wpuf_edit_post_submit" value="yes" />
-	                        <input type="hidden" name="post_id" value="<?php echo $curpost->ID; ?>">
-                    	</div>
-                    </li>
+                    	<li class="row">
+	                    	<div class="span3 offset1">
+	                            <label for="new-post-hashtags">
+	                                <?php _e('Twitter hashtag', 'adt'); ?>
+	                            </label>
+
+	                            <div class="description">
+	                                <?php _e('Write the twitter hashtag without the "#"', 'adt'); ?>
+	                            </div>
+                            </div>
+                            
+	                    	<div class="span7 field">
+                            	<input type="text" name="wpuf_post_hashtags" id="new-post-hashtags" value="<?php echo $hashtag; ?>">
+	                    	</div>
+                        </li>
+
+                    	<li class="row">
+                        	<div class="span2 offset4">
+		                        <label>&nbsp;</label>
+		                        <input class="wpuf_submit" type="submit" name="wpuf_edit_post_submit" value="<?php _e('update', 'adt'); ?>">
+		                        <input type="hidden" name="wpuf_edit_post_submit" value="yes" />
+		                        <input type="hidden" name="post_id" value="<?php echo $curpost->ID; ?>">
+                        	</div>
+						</li>
                 </ul>
             </form>
         </div>
@@ -216,7 +235,7 @@ class ADTP_Edit_Post {
 		<script type="text/javascript">
 			jQuery(function() {
 				jQuery('.alert-delete-shoot').click(function(){
-					jQuery('body').append('<div class="alert alert-red alert-full"><?php _e('Are you sure you want to delete this arquive?', 'adt'); ?><ul><li><a href="<?php echo wp_nonce_url( "?action=del&pid=" . $curpost->ID, 'wpuf_del' ) ?>" class="btn_01 white"><?php _e('YES', 'adt'); ?></a></li><li><a href="#" id="no" class="btn_01 white"><?php _e('NO', 'adt'); ?></a></li></ul></div>');
+					jQuery('body').append('<div class="alert alert-red alert-full"><?php _e('Are you sure you want to delete this stream?', 'adt'); ?><ul><li><a href="<?php echo wp_nonce_url( "?action=del&pid=" . $curpost->ID, 'wpuf_del' ) ?>" class="btn_01 white"><?php _e('YES', 'adt'); ?></a></li><li><a href="#" id="no" class="btn_01 white"><?php _e('NO', 'adt'); ?></a></li></ul></div>');
 					
 					jQuery('#no').click(function(){
 						jQuery('.alert-red').remove();
@@ -239,6 +258,7 @@ class ADTP_Edit_Post {
 
         $title = trim( $_POST['wpuf_post_title'] );
         $content = trim( $_POST['wpuf_post_content'] );
+        $hashtag = trim( $_POST['wpuf_post_hashtags'] );
 
         $tags = '';
         $cat = '';
@@ -292,6 +312,10 @@ class ADTP_Edit_Post {
                 //upload attachment to the post
                 wpuf_upload_attachment( $post_id );
 
+				if ( isset( $_POST['wpuf_post_hashtags'] ) ) {
+					update_post_meta($post_id, 'adt_twitter_hashtag', $hashtag);
+				}
+
                 //set post thumbnail if has any
                 if ( $attach_id ) {
                     set_post_thumbnail( $post_id, $attach_id );
@@ -306,4 +330,4 @@ class ADTP_Edit_Post {
 
 }
 
-$wpuf_edit = new ADTP_Edit_Post();
+$wpuf_edit_stream = new ADTP_Edit_Stream();
