@@ -10,8 +10,12 @@ class ADTP_Edit_Profile {
 
         add_action( 'show_user_profile', array($this, 'post_lock_form') );
         add_action( 'edit_user_profile', array($this, 'post_lock_form') );
+		add_action('user_edit_form_tag',array($this, 'make_uploadable_form'));
     }
 
+	function make_uploadable_form() {
+	    echo ' enctype="multipart/form-data"';
+	}
     /**
      * Hanldes the editprofile shortcode
      *
@@ -76,7 +80,7 @@ class ADTP_Edit_Profile {
         }
         ?>
         <div class="wpuf-profile span12">
-            <form class="form_01 usuario" name="profile" id="your-profile" action="" method="post">
+            <form class="form_01 usuario" name="profile" id="your-profile" action="" method="post" enctype="multipart/form-data">
                 <?php wp_nonce_field( 'update-profile_' . $user_id ) ?>
                 <?php if ( $wp_http_referer ) : ?>
                     <input type="hidden" name="wp_http_referer" value="<?php echo esc_url( $wp_http_referer ); ?>" />
@@ -154,6 +158,10 @@ class ADTP_Edit_Profile {
                 		</div>
                 	</li>
 
+                    <! -- _____ post thumbnail __________________________ -->
+                	<?php if ( current_theme_supports( 'post-thumbnails' ) ) { ?>
+					<?php } ?>
+
                 	<li class="row">
                 		<div class="span3 offset1">
 	                		<label for="description"><?php _e( 'Biographical Info', 'adtp' ); ?></label>
@@ -187,9 +195,9 @@ class ADTP_Edit_Profile {
                 		</div>
                 	</li>
                 	
-                </ul>
 
                 <?php do_action( 'show_user_profile', $profileuser ); ?>
+                </ul>
 
                 <div class="submit row">
                     <div class="span2 offset4">
@@ -232,11 +240,60 @@ class ADTP_Edit_Profile {
                         <input type="text" name="wpuf_lock_cause" id="wpuf_lock_cause" class="regular-text" value="<?php echo esc_attr( $profileuser->wpuf_lock_cause ); ?>" />
                     </td>
                 </tr>
-            </table>
 
+            </table>
             <?php
-        }
-    }
+        } ?>
+					<li class="row hide">
+                    	<div class="span3 offset1">
+                    	
+                        	<label for="post-thumbnail">
+                        		<?php _e( 'Id:', 'adtp' ); ?>
+                        	</label>
+						</div>
+
+						<div class="span7 field">
+							<div class="file_warper">
+                                <input type="text" name="avatar" id="avatar" class="regular-text" value="<?php echo esc_attr( $profileuser->avatar ); ?>" />
+							</div>
+						</div>
+					</li>
+
+					<li class="row">
+                    	<div class="span3 offset1">
+                    	
+                        	<label for="post-thumbnail">
+                        		<?php echo _e('Avatar', 'adt'); ?>
+                        	</label>
+
+                            <div class="description">
+                                <?php _e('Upload an image not bigger than 1200px width. Allowed formats: jpg, png', 'adt'); ?>
+                            </div>
+
+                            <?php if(get_user_meta($profileuser->id, 'avatar', true) != ''){ ?>
+                            <div class="margin_top_20">
+                            	<?php echo wp_get_attachment_image(get_user_meta($profileuser->id, 'avatar', true), 'zpan3_false') ?>
+                            </div>
+                            <?php } ?>
+                            
+						</div>
+
+						<div class="span7 field">
+							<div class="file_warper">
+                                <input type="file" id="input_thumb" name="input_thumb" class="filestyle" data-icon="false" />
+							</div>
+
+						</div>
+					</li>
+					
+					<script type="text/javascript">
+						jQuery(":file").filestyle({icon: false});
+					</script>
+					
+					
+
+
+    <?php }
 
     /**
      * Update user profile lock
@@ -244,12 +301,34 @@ class ADTP_Edit_Profile {
      * @param int $user_id
      */
     function post_lock_update( $user_id ) {
-        if ( is_admin() && current_user_can( 'edit_users' ) ) {
+		global $_FILES,$_POST;
             update_user_meta( $user_id, 'wpuf_postlock', $_POST['wpuf_postlock'] );
             update_user_meta( $user_id, 'wpuf_lock_cause', $_POST['wpuf_lock_cause'] );
             update_user_meta( $user_id, 'wpuf_sub_validity', $_POST['wpuf_sub_validity'] );
             update_user_meta( $user_id, 'wpuf_sub_pcount', $_POST['wpuf_sub_pcount'] );
-        }
+
+            //upload attachment to the post            
+			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+            $uploadedfile = $_FILES['input_thumb'];
+			$upload_overrides = array( 'test_form' => false );
+			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+			
+			$attachment = array(
+				'post_title' => $_FILES["input_thumb"]["name"],
+				'post_content' => '',
+				'post_type' => 'attachment',
+				'post_status' => 'publish',
+				'post_mime_type' => $_FILES["input_thumb"]["type"],
+				'guid' => $movefile['url']
+			);
+			$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ] );
+			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
+			wp_update_attachment_metadata( $imaxe_id, $attach_data );
+			
+			update_usermeta( $user_id, 'avatar', $imaxe_id );
+        
     }
 
 }

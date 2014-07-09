@@ -128,14 +128,35 @@ class ADTP_Add_Multistream {
                             </div>
                         </li>
 
-                        <?php
-                        do_action( 'wpuf_add_post_form_after_description', $post_type );
+                        <?php do_action( 'wpuf_add_post_form_after_description', $post_type ); ?>
+                        
+                        <! -- _____ post thumbnail __________________________ -->
+                    	<?php if ( current_theme_supports( 'post-thumbnails' ) ) { ?>
+						<li class="row">
+                        	<div class="span3 offset1">
+                        	
+                            	<label for="post-thumbnail">
+                            		<?php echo wpuf_get_option( 'ft_image_label', 'wpuf_labels', __( 'Featured Image', 'wpuf' ) ); ?>
+                            	</label>
 
-                        //$this->publish_date_form();
-                        //$this->expiry_date_form();
+	                            <div class="description">
+	                                <?php _e('Upload an image not bigger than 1200px width. Allowed formats: jpg, png', 'adt'); ?>
+	                            </div>
+							</div>
+
+							<div class="span7 field">
+								<div class="file_warper">
+	                                <input type="file" id="input_thumb" name="file" class="filestyle" data-icon="false" />
+								</div>
+							</div>
+						</li>
+						
+						<script type="text/javascript">
+							jQuery(":file").filestyle({icon: false});
+						</script>
+						<?php } ?>
 
 
-                            ?>
                             <! -- _____ tags ___________________________ -->
                             <li class="row">
 	                        	<div class="span3 offset1">
@@ -193,81 +214,6 @@ class ADTP_Add_Multistream {
         }
     }
 
-    /**
-     * Prints the post publish date on form
-     *
-     * @return bool|string
-     */
-    function publish_date_form() {
-
-        $timezone_format = _x( 'Y-m-d G:i:s', 'timezone date format' );
-        $month = date_i18n( 'm' );
-        $month_array = array(
-            '01' => 'Jan',
-            '02' => 'Feb',
-            '03' => 'Mar',
-            '04' => 'Apr',
-            '05' => 'May',
-            '06' => 'Jun',
-            '07' => 'Jul',
-            '08' => 'Aug',
-            '09' => 'Sep',
-            '10' => 'Oct',
-            '11' => 'Nov',
-            '12' => 'Dec'
-        );
-        ?>
-        <li>
-            <label for="timestamp-wrap">
-                <?php _e( 'Publish Time:', 'adtp' ); ?> <span class="required">*</span>
-            </label>
-            <div class="timestamp-wrap">
-                <select name="mm">
-                    <?php
-                    foreach ($month_array as $key => $val) {
-                        $selected = ( $key == $month ) ? ' selected="selected"' : '';
-                        echo '<option value="' . $key . '"' . $selected . '>' . $val . '</option>';
-                    }
-                    ?>
-                </select>
-                <input type="text" autocomplete="off" tabindex="4" maxlength="2" size="2" value="<?php echo date_i18n( 'd' ); ?>" name="jj">,
-                <input type="text" autocomplete="off" tabindex="4" maxlength="4" size="4" value="<?php echo date_i18n( 'Y' ); ?>" name="aa">
-                @ <input type="text" autocomplete="off" tabindex="4" maxlength="2" size="2" value="<?php echo date_i18n( 'G' ); ?>" name="hh">
-                : <input type="text" autocomplete="off" tabindex="4" maxlength="2" size="2" value="<?php echo date_i18n( 'i' ); ?>" name="mn">
-            </div>
-            <div class="clear"></div>
-            <p class="description"></p>
-        </li>
-        <?php
-    }
-
-    /**
-     * Prints post expiration date on the form
-     *
-     * @return bool|string
-     */
-    function expiry_date_form() {
-        ?>
-        <li>
-            <label for="timestamp-wrap">
-                <?php _e( 'Expiration Time:', 'adtp' ); ?><span class="required">*</span>
-            </label>
-            <select name="expiration-date">
-                <?php
-                for ($i = 1; $i <= 90; $i++) {
-                    if ( $i % 2 != 0 ) {
-                        continue;
-                    }
-
-                    printf( '<option value="%1$d">%1$d %2$s</option>', $i, __( 'days', 'adtp' ) );
-                }
-                ?>
-            </select>
-            <div class="clear"></div>
-            <p class="description"><?php _e( 'Post expiration time in day after publishing.', 'adtp' ); ?></p>
-        </li>
-        <?php
-    }
 
     /**
      * Validate the post submit data
@@ -280,12 +226,7 @@ class ADTP_Add_Multistream {
 
         $errors = array();
 
-        var_dump( $_POST );
-
-        //if there is some attachement, validate them
-        if ( !empty( $_FILES['wpuf_post_attachments'] ) ) {
-            $errors = wpuf_check_upload();
-        }
+        var_dump( $_POST );        
 
         $title = trim( $_POST['wpuf_post_title'] );
         $content = trim( $_POST['wpuf_post_content'] );
@@ -315,8 +256,6 @@ class ADTP_Add_Multistream {
             $tags = explode( ',', $tags );
         }
 
-        //post attachment
-        $attach_id = isset( $_POST['wpuf_featured_img'] ) ? intval( $_POST['wpuf_featured_img'] ) : 0;
 
         //post type
         $post_type = trim( strip_tags( $_POST['wpuf_post_type'] ) );
@@ -349,8 +288,25 @@ class ADTP_Add_Multistream {
 
         if ( $post_id ) {
 
-            //upload attachment to the post
-            wpuf_upload_attachment( $post_id );
+            //upload attachment to the post            
+			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+            $uploadedfile = $_FILES['file'];
+			$upload_overrides = array( 'test_form' => false );
+			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+			
+			$attachment = array(
+				'post_title' => $_FILES["file"]["name"],
+				'post_content' => '',
+				'post_type' => 'attachment',
+				'post_parent' => $post_id,
+				'post_mime_type' => $_FILES["file"]["type"],
+				'guid' => $movefile['url']
+			);
+			$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ], $post_id );
+			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
+			wp_update_attachment_metadata( $imaxe_id, $attach_data );
+			set_post_thumbnail( $post_id, $imaxe_id );
 
             //send mail notification
             if ( wpuf_get_option( 'post_notification', 'adtp_others', 'yes' ) == 'yes' ) {
@@ -361,10 +317,6 @@ class ADTP_Add_Multistream {
 				update_post_meta($post_id, 'adt_twitter_hashtag', $hashtag);
 			}
 
-            //set post thumbnail if has any
-            if ( $attach_id ) {
-                set_post_thumbnail( $post_id, $attach_id );
-            }
 
             //Set Post expiration date if has any
 

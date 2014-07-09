@@ -75,21 +75,6 @@ class ADTP_Add_Post {
                         <! -- _____ add attachments to post ________________ -->
                         <?php do_action( 'wpuf_add_post_form_top', $post_type ); //plugin hook   ?>
 
-                        <?php if ( $featured_image == 'yes' ) { ?>
-                            <?php if ( current_theme_supports( 'post-thumbnails' ) ) { ?>
-                                <li>
-                                    <label for="post-thumbnail"><?php _e('Featured Image', 'adt' ); ?></label>
-                                    <div id="wpuf-ft-upload-container">
-                                        <div id="wpuf-ft-upload-filelist"></div>
-                                        <a id="wpuf-ft-upload-pickfiles" class="button" href="#"><?php _e('Upload Image', 'adt'); ?></a>
-                                    </div>
-                                    <div class="clear"></div>
-                                </li>
-                            <?php } else { ?>
-                                <div class="info"><?php _e( 'Your theme doesn\'t support featured image', 'adtp' ) ?></div>
-                            <?php } ?>
-                        <?php } ?>
-
                         <! -- _____ titulo _________________________________ -->
                         <li class="row">
                         	<div class="span3 offset1">
