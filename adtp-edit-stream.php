@@ -113,7 +113,12 @@ class ADTP_Edit_Stream {
 				<?php } ?>
 				
 			<div class="row margin_top_60">
-				<div class="span4">
+
+				<div class="span1 offset1">
+					<a href="<?php echo get_permalink($curpost->ID); ?>" class="btn_delete"><</a>
+				</div>
+
+				<div class="span2">
 					<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01 right"></a>
 				</div>
 				

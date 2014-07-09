@@ -115,7 +115,12 @@ class ADTP_Edit_Post {
 				</div>
 				
 			<div class="row margin_top_60">
-				<div class="span4">
+				
+				<div class="span1 offset1">
+					<a href="<?php echo get_permalink($curpost->ID); ?>" class="btn_delete"><</a>
+				</div>
+				
+				<div class="span2">
 					<ul class="main_menu reset">
 						<li>
 							<a href="#" id="adt_menu" title="<?php _e('Adtlantida.tv menu', 'adt'); ?>" class="btn_01 right"></a>
@@ -201,6 +206,36 @@ class ADTP_Edit_Post {
                         </li>
 
                     <?php do_action( 'wpuf_add_post_form_tags', $curpost->post_type, $curpost ); ?>
+
+                    <! -- _____ post thumbnail __________________________ -->
+                	<?php if ( current_theme_supports( 'post-thumbnails' ) ) { ?>
+					<li class="row">
+                    	<div class="span3 offset1">
+                    	
+                        	<label for="post-thumbnail">
+                        		<?php echo wpuf_get_option( 'ft_image_label', 'wpuf_labels', __( 'Featured Image', 'wpuf' ) ); ?>
+                        	</label>
+
+                            <div class="description">
+                                <?php _e('Upload an image not bigger than 1200px width. Allowed formats: jpg, png', 'adt'); ?>
+                            </div>
+                            
+                            <div class="margin_top_20">
+                            	<?php echo get_the_post_thumbnail( $curpost->ID, 'zpan3_false' ); ?>
+                            </div>
+						</div>
+
+						<div class="span7 field">
+							<div class="file_warper">
+                                <input type="file" id="input_thumb" name="file" class="filestyle" data-icon="false" />
+							</div>
+						</div>
+					</li>
+					
+					<script type="text/javascript">
+						jQuery(":file").filestyle({icon: false});
+					</script>
+					<?php } ?>
 
                     <li class="row">
                     	<div class="offset4 span8">
@@ -289,13 +324,25 @@ class ADTP_Edit_Post {
             if ( $post_id ) {
                 echo '<div class="alert alert-success alert-full">' . __( 'Post updated succesfully.', 'adtp' ) . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
 
-                //upload attachment to the post
-                wpuf_upload_attachment( $post_id );
-
-                //set post thumbnail if has any
-                if ( $attach_id ) {
-                    set_post_thumbnail( $post_id, $attach_id );
-                }
+	            //upload attachment to the post            
+				if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	            $uploadedfile = $_FILES['file'];
+				$upload_overrides = array( 'test_form' => false );
+				$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+				
+				$attachment = array(
+					'post_title' => $_FILES["file"]["name"],
+					'post_content' => '',
+					'post_type' => 'attachment',
+					'post_parent' => $post_id,
+					'post_mime_type' => $_FILES["file"]["type"],
+					'guid' => $movefile['url']
+				);
+				$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ], $post_id );
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
+				$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
+				wp_update_attachment_metadata( $imaxe_id, $attach_data );
+				set_post_thumbnail( $post_id, $imaxe_id );
 
 
             }
