@@ -307,27 +307,29 @@ class ADTP_Edit_Profile {
             update_user_meta( $user_id, 'wpuf_sub_validity', $_POST['wpuf_sub_validity'] );
             update_user_meta( $user_id, 'wpuf_sub_pcount', $_POST['wpuf_sub_pcount'] );
 
-            //upload attachment to the post            
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
-
-            $uploadedfile = $_FILES['input_thumb'];
-			$upload_overrides = array( 'test_form' => false );
-			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-			
-			$attachment = array(
-				'post_title' => $_FILES["input_thumb"]["name"],
-				'post_content' => '',
-				'post_type' => 'attachment',
-				'post_status' => 'publish',
-				'post_mime_type' => $_FILES["input_thumb"]["type"],
-				'guid' => $movefile['url']
-			);
-			$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ] );
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
-			$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
-			wp_update_attachment_metadata( $imaxe_id, $attach_data );
-			
-			update_usermeta( $user_id, 'avatar', $imaxe_id );
+            //upload attachment to the post 
+            if($_FILES['input_thumb']['error']==0) {          
+				if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	
+	            $uploadedfile = $_FILES['input_thumb'];
+				$upload_overrides = array( 'test_form' => false );
+				$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+				
+				$attachment = array(
+					'post_title' => $_FILES["input_thumb"]["name"],
+					'post_content' => '',
+					'post_type' => 'attachment',
+					'post_status' => 'publish',
+					'post_mime_type' => $_FILES["input_thumb"]["type"],
+					'guid' => $movefile['url']
+				);
+				$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ] );
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
+				$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
+				wp_update_attachment_metadata( $imaxe_id, $attach_data );
+				
+				update_usermeta( $user_id, 'avatar', $imaxe_id );
+			}
         
     }
 

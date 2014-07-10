@@ -325,25 +325,26 @@ class ADTP_Edit_Post {
                 echo '<div class="alert alert-success alert-full">' . __( 'Post updated succesfully.', 'adtp' ) . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
 
 	            //upload attachment to the post            
-				if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
-	            $uploadedfile = $_FILES['file'];
-				$upload_overrides = array( 'test_form' => false );
-				$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-				
-				$attachment = array(
-					'post_title' => $_FILES["file"]["name"],
-					'post_content' => '',
-					'post_type' => 'attachment',
-					'post_parent' => $post_id,
-					'post_mime_type' => $_FILES["file"]["type"],
-					'guid' => $movefile['url']
-				);
-				$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ], $post_id );
-				require_once( ABSPATH . 'wp-admin/includes/image.php' );
-				$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
-				wp_update_attachment_metadata( $imaxe_id, $attach_data );
-				set_post_thumbnail( $post_id, $imaxe_id );
-
+				if($_FILES['input_thumb']['error']==0) {          
+					if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		            $uploadedfile = $_FILES['file'];
+					$upload_overrides = array( 'test_form' => false );
+					$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+					
+					$attachment = array(
+						'post_title' => $_FILES["file"]["name"],
+						'post_content' => '',
+						'post_type' => 'attachment',
+						'post_parent' => $post_id,
+						'post_mime_type' => $_FILES["file"]["type"],
+						'guid' => $movefile['url']
+					);
+					$imaxe_id = wp_insert_attachment( $attachment,$movefile[ 'file' ], $post_id );
+					require_once( ABSPATH . 'wp-admin/includes/image.php' );
+					$attach_data = wp_generate_attachment_metadata( $imaxe_id, $movefile['file'] );
+					wp_update_attachment_metadata( $imaxe_id, $attach_data );
+					set_post_thumbnail( $post_id, $imaxe_id );
+				}
 
             }
         } else {
